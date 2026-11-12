@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATE McRAE // Music Vault & Player</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-badge">OFFICIAL ARCHIVE // 2025</div>
+                <h1 class="brand-title">TATE McRAE <span class="gradient-text">VAULT</span></h1>
+            </div>
+
+            <div class="header-search">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search-input" placeholder="Cari judul lagu, lirik, atau album..." autocomplete="off">
+            </div>
+
+            <div class="header-actions">
+                <button id="open-guide-btn" class="btn btn-outline" title="Daftar nama file untuk di folder audio/ dan covers/">
+                    <i class="fas fa-list-check"></i>
+                    <span>Daftar File Lagu</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Spotlight Section -->
+    <section class="hero-section">
+        <div class="hero-banner">
+            <div class="hero-content">
+                <div class="hero-tag"><i class="fas fa-fire"></i> UNRELEASED TRACKS INCLUDED</div>
+                <h2 class="hero-title">Hard & Call My Bluff</h2>
+                <p class="hero-desc">
+                    Dengarkan koleksi lagu-lagu Tate McRae dengan audio preview studio 30 detik resmi dari internet, lirik lengkap per bait, serta kontrol kecepatan musik (Slowed & Sped Up).
+                </p>
+                <div class="hero-pills">
+                    <span class="pill"><i class="fas fa-headphones"></i> Studio Audio Previews</span>
+                    <span class="pill"><i class="fas fa-bolt"></i> Speed Control (0.5x - 2.0x)</span>
+                    <span class="pill"><i class="fas fa-quote-right"></i> Lirik Lengkap</span>
+                    <span class="pill"><i class="fas fa-fire"></i> Unreleased Track "Hard" & "Call My Bluff"</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <main class="main-content">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">Semua Lagu</button>
+                <button class="filter-btn" data-filter="unreleased">🔥 Unreleased Exclusives</button>
+                <button class="filter-btn" data-filter="so-close">So Close To What</button>
+                <button class="filter-btn" data-filter="think-later">THINK LATER</button>
+                <button class="filter-btn" data-filter="singles">Singles</button>
+                <button class="filter-btn" data-filter="classics">Classics</button>
+            </div>
+            <div class="filter-status">
+                <span id="track-count" class="track-count">Memuat lagu...</span>
+            </div>
+        </div>
+
+        <!-- Songs Grid -->
+        <div id="songs-grid" class="songs-grid">
+            <!-- Dynamically populated via js/app.js -->
+        </div>
+    </main>
+
+    <!-- Persistent Music Player Bar -->
+    <footer id="player-bar" class="player-bar">
+        <!-- Visualizer Bar -->
+        <canvas id="visualizer-canvas" class="visualizer-canvas" width="400" height="30"></canvas>
+
+        <div class="player-container">
+            <!-- Left: Current Song Info -->
+            <div class="player-track-info">
+                <div class="player-thumb-wrap">
+                    <img id="player-thumb" src="" alt="Cover" class="player-thumb-img">
+                    <div id="player-vinyl" class="player-vinyl"></div>
+                </div>
+                <div class="player-meta">
+                    <div class="player-title-row">
+                        <span id="player-title" class="player-title">Pilih Lagu</span>
+                        <div id="player-source-badge" class="source-badge badge-preview">
+                            <i class="fas fa-headphones"></i> PREVIEW 30s
+                        </div>
+                    </div>
+                    <span id="player-artist" class="player-artist">Tate McRae</span>
+                </div>
+            </div>
+
+            <!-- Center: Playback Controls & Progress Bar -->
+            <div class="player-controls-wrap">
+                <div class="player-controls">
+                    <button id="shuffle-btn" class="control-btn" title="Mode Acak (Shuffle)">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button id="prev-btn" class="control-btn" title="Lagu Sebelumnya">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button id="play-pause-btn" class="control-btn play-btn" title="Putar / Jeda (Spasi)">
+                        <i id="play-pause-icon" class="fas fa-play"></i>
+                    </button>
+                    <button id="next-btn" class="control-btn" title="Lagu Selanjutnya">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button id="repeat-btn" class="control-btn" title="Ulangi Lagu (Repeat)">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <span id="current-time" class="time-text">0:00</span>
+                    <div id="progress-bar" class="progress-bar" title="Geser durasi">
+                        <div id="progress-fill" class="progress-fill"></div>
+                        <div id="progress-handle" class="progress-handle"></div>
+                    </div>
+                    <span id="duration-time" class="time-text">0:00</span>
+                </div>
+            </div>
+
+            <!-- Right: Speed, Volume & Lyrics Controls -->
+            <div class="player-extras">
+                <!-- Speed Control Pill & Popover -->
+                <div class="speed-controller-widget">
+                    <div class="speed-label-group">
+                        <span class="speed-title"><i class="fas fa-gauge-high"></i> SPEED</span>
+                        <span id="speed-value-badge" class="speed-badge">1.00x</span>
+                    </div>
+
+                    <div class="speed-slider-wrap">
+                        <input type="range" id="speed-slider" min="0.5" max="2.0" step="0.05" value="1.0" title="Kecepatan Musik">
+                    </div>
+
+                    <div class="speed-presets">
+                        <button class="speed-preset-btn" data-speed="0.8" title="Slowed Down">0.8x</button>
+                        <button class="speed-preset-btn active" data-speed="1.0" title="Normal">1.0x</button>
+                        <button class="speed-preset-btn" data-speed="1.25" title="Sped Up">1.25x</button>
+                        <button class="speed-preset-btn" data-speed="1.5" title="Nightcore">1.5x</button>
+                    </div>
+                </div>
+
+                <!-- Volume -->
+                <div class="volume-widget">
+                    <i id="volume-icon" class="fas fa-volume-up volume-icon" title="Mute / Unmute"></i>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1.0" title="Volume">
+                </div>
+
+                <!-- Open Lyrics Drawer Button -->
+                <button id="open-lyrics-player-btn" class="lyrics-toggle-btn" title="Buka Panel Lirik (Tombol L)">
+                    <i class="fas fa-align-left"></i>
+                    <span>Lirik</span>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal 1: Lyrics Drawer / Modal -->
+    <div id="lyrics-modal" class="modal-wrapper hidden">
+        <div id="lyrics-backdrop" class="modal-backdrop"></div>
+        <div class="modal-card lyrics-card">
+            <div class="modal-header">
+                <div class="lyrics-header-info">
+                    <img id="lyrics-cover" src="" alt="Cover" class="lyrics-header-cover">
+                    <div>
+                        <h3 id="lyrics-title" class="modal-title">Judul Lagu</h3>
+                        <p id="lyrics-artist" class="modal-subtitle">Tate McRae</p>
+                    </div>
+                </div>
+                <div class="modal-header-actions">
+                    <button id="copy-lyrics-btn" class="btn btn-sm btn-outline" title="Salin semua lirik">
+                        <i class="fas fa-copy"></i> Salin Lirik
+                    </button>
+                    <button id="lyrics-close-btn" class="modal-close-btn" title="Tutup">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="lyrics-body" class="lyrics-scroll-body">
+                <!-- Formatted lyrics lines injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Repository File Naming Guide (Read-Only) -->
+    <div id="guide-modal" class="modal-wrapper hidden">
+        <div id="guide-modal-backdrop" class="modal-backdrop"></div>
+        <div class="modal-card guide-card">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title"><i class="fas fa-book-open"></i> Panduan File Lagu & Cover (Repo)</h3>
+                    <p class="modal-subtitle">Daftar nama file di folder <code>audio/</code> dan <code>covers/</code> agar terdeteksi sebagai Full Song</p>
+                </div>
+                <button id="guide-modal-close-btn" class="modal-close-btn" title="Tutup">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body guide-modal-body">
+                <div class="method-card" style="margin-bottom: 20px;">
+                    <div class="method-badge">Cara Menambahkan Full Song</div>
+                    <h4>Taruh File di Folder Proyek & Push ke GitHub</h4>
+                    <p>
+                        Jika kamu meletakkan file <code>.mp3</code> di folder <code>audio/</code> dan gambar di folder <code>covers/</code> sesuai nama di tabel, website akan otomatis memutar **versi Full Song** menggantikan preview!
+                    </p>
+                </div>
+
+                <!-- File Names Table -->
+                <div class="table-responsive">
+                    <table class="guide-table">
+                        <thead>
+                            <tr>
+                                <th>Judul Lagu</th>
+                                <th>File Audio (di folder <code>audio/</code>)</th>
+                                <th>File Cover (di folder <code>covers/</code>)</th>
+                                <th>Status Saat Ini</th>
+                            </tr>
+                        </thead>
+                        <tbody id="guide-table-body">
+                            <!-- Injected by js/app.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Data & Scripts -->
+    <script src="js/songs.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
